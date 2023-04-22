@@ -4,20 +4,32 @@ class ManipulateVid:
     #Initilialize the object with a path
     def __init__(self, path):
         self.vid = cv2.VideoCapture(path)
-    #Resize the frames (with 1/2 the resolution)
-    def resize_frames(self):
+    #Resize the frames (with 1/2 the resolution) and reverse the video
+    def altervid(self):
+        resized_list = []
         while (self.vid.isOpened()):
             success, frame = self.vid.read()
+            '''cv2.imshow('Frame',frame)
+            if cv2.waitKey(5000) & 0xFF == ord('q'):
+                 break'''
             if (success):
-                pass
+                #Resize each frame
+                height, width, layers = frame.shape
+                newheight = height // 2
+                newwidth = width // 2
+                resized_frame = cv2.resize(frame, (newwidth, newheight))
+                resized_list.append(resized_frame)
             else:
                 break
-    #Reverse the order of the resized frames
-    def reverse_order(self):
-        pass
+        #Reverse Video
+        newvideo = cv2.VideoWriter("newvid.MOV", cv2.VideoWriter_fourcc('m','p','4','v'), 24, (newwidth, newheight))
+        for i in range(len(resized_list)):
+            newvideo.write(resized_list[len(resized_list)-1-i])
+        newvideo.release()
 
 def main():
-    pass
+    a = ManipulateVid("samplevid.MOV")
+    a.altervid()
 
 if __name__ == "__main__":
     main()
