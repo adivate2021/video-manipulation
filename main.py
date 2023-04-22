@@ -7,6 +7,7 @@ class ManipulateVid:
     #Resize the frames (with 1/2 the resolution) and reverse the video
     def altervid(self):
         resized_list = []
+        frameno = 1
         while (self.vid.isOpened()):
             success, frame = self.vid.read()
             '''cv2.imshow('Frame',frame)
@@ -18,6 +19,8 @@ class ManipulateVid:
                 newheight = height // 2
                 newwidth = width // 2
                 resized_frame = cv2.resize(frame, (newwidth, newheight))
+                cv2.putText(resized_frame, str(frameno), (int(.0463*newwidth),int(.0463*newheight)), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,0), 6)
+                frameno+=1
                 resized_list.append(resized_frame)
             else:
                 break
