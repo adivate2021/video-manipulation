@@ -33,7 +33,7 @@ class ManipulateVid:
         total_frames = int(self.vid.get(cv2.CAP_PROP_FRAME_COUNT))
         height = int(self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
         width = int(self.vid.get(cv2.CAP_PROP_FRAME_WIDTH))
-        fps = int(self.vid.get(cv2.CAP_PROP_FPS))
+        fps = round(self.vid.get(cv2.CAP_PROP_FPS))
         counter = total_frames - 1
         newvideo = cv2.VideoWriter("newvid.MOV", cv2.VideoWriter_fourcc('m','p','4','v'), fps, (width//2, height//2))
         while (counter >= 0):
@@ -50,10 +50,34 @@ class ManipulateVid:
                 counter-=1
             else:
                 break
+    #Failed attempt at a faster space efficient method
+    '''def faster_space_efficient_altervid(self):
+        frameno = 1
+        total_frames = round(self.vid.get(cv2.CAP_PROP_FRAME_COUNT))
+        height = int(self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        width = int(self.vid.get(cv2.CAP_PROP_FRAME_WIDTH))
+        fps = round(self.vid.get(cv2.CAP_PROP_FPS))
+        newvideo = cv2.VideoWriter("newvid.MOV", cv2.VideoWriter_fourcc('m','p','4','v'), fps, (width//2, height//2))
+        while (self.vid.isOpened()):
+            success, frame = self.vid.read()
+            if (success):
+                print(frameno)
+                #Resize each frame
+                height, width, layers = frame.shape
+                newheight = height // 2
+                newwidth = width // 2
+                resized_frame = cv2.resize(frame, (newwidth, newheight))
+                cv2.putText(resized_frame, str(frameno), (int(.0463*newwidth),int(.0463*newheight)), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,0), 6)
+                frameno+=1
+                newvideo.write(resized_frame)
+                newvideo.set(cv2.CAP_PROP_POS_FRAMES, 1)
+            else:
+                break
+        newvideo.release()'''
 
 def main():
     a = ManipulateVid("samplevid.MOV")
-    a.altervid()
+    a.faster_space_efficient_altervid()
 
 if __name__ == "__main__":
     main()
