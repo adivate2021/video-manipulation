@@ -29,6 +29,27 @@ class ManipulateVid:
         for i in range(len(resized_list)):
             newvideo.write(resized_list[len(resized_list)-1-i])
         newvideo.release()
+    def space_efficient_altervid(self):
+        total_frames = int(self.vid.get(cv2.CAP_PROP_FRAME_COUNT))
+        height = int(self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        width = int(self.vid.get(cv2.CAP_PROP_FRAME_WIDTH))
+        fps = int(self.vid.get(cv2.CAP_PROP_FPS))
+        counter = total_frames - 1
+        newvideo = cv2.VideoWriter("newvid.MOV", cv2.VideoWriter_fourcc('m','p','4','v'), fps, (width//2, height//2))
+        while (counter >= 0):
+            self.vid.set(cv2.CAP_PROP_POS_FRAMES, counter)
+            success, frame = self.vid.read()
+            if (success):
+                #Resize each frame
+                height, width, layers = frame.shape
+                newheight = height // 2
+                newwidth = width // 2
+                resized_frame = cv2.resize(frame, (newwidth, newheight))
+                cv2.putText(resized_frame, str(counter), (int(.0463*newwidth),int(.0463*newheight)), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,0), 6)
+                newvideo.write(resized_frame)
+                counter-=1
+            else:
+                break
 
 def main():
     a = ManipulateVid("samplevid.MOV")
